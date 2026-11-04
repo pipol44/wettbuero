@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Wettbüro</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1020; --bg2:#0f1729; --card:#141e33; --card2:#1a2640; --line:rgba(255,255,255,.07);
+  --tx:#e9eef8; --mut:#8693ad; --dim:#56627c;
+  --ice:#5ad1ff; --ice2:#2a9fd6; --win:#b4f461; --loss:#ff5d73; --gold:#ffc94a; --silver:#c6d2e6; --bronze:#e59a5c;
+  --r:18px; --cond:'Barlow Condensed',system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0}
+html,body{background:var(--bg);color:var(--tx);font:15px/1.45 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{padding-bottom:calc(84px + env(safe-area-inset-bottom));min-height:100vh;
+  background:radial-gradient(120% 60% at 50% -10%,#16305a 0%,rgba(10,16,32,0) 60%),var(--bg);background-attachment:fixed}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.num{font-family:var(--cond);font-weight:700;letter-spacing:.2px;font-variant-numeric:tabular-nums}
+
+/* Header */
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 8px}
+.logo{font-family:var(--cond);font-weight:800;font-size:26px;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.logo i{width:26px;height:26px;border-radius:8px;background:var(--ice);display:grid;place-items:center;color:#06263a;font-style:normal;font-size:15px;transform:rotate(-8deg)}
+.me{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);padding:5px 12px 5px 5px;border-radius:99px}
+.me b{font-family:var(--cond);font-size:19px}
+h1{font-family:var(--cond);font-weight:800;font-size:34px;letter-spacing:.5px;text-transform:uppercase;padding:6px 18px 12px;line-height:1}
+h1 small{display:block;font:500 13px Inter;color:var(--mut);text-transform:none;letter-spacing:0;margin-top:6px}
+main{padding:0 14px}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.lbl{font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--mut);margin-bottom:12px;display:flex;justify-content:space-between}
+
+/* Avatare */
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:700 13px Inter;color:#0a1020;flex:none}
+.av.s{width:26px;height:26px;font-size:11px}
+.av.l{width:56px;height:56px;font-size:20px}
+.people{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 4px;scrollbar-width:none}
+.people::-webkit-scrollbar{display:none}
+.person{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--mut);min-width:52px}
+.person .av{width:46px;height:46px;font-size:16px;opacity:.55;transition:.15s}
+.person.on{color:var(--tx);font-weight:600}
+.person.on .av{opacity:1;box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--ice)}
+
+textarea{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:14px;color:var(--tx);padding:14px;font:500 17px Inter;min-height:84px;resize:none;outline:none}
+textarea:focus,input:focus{border-color:var(--ice)}
+textarea::placeholder{color:var(--dim)}
+.stakes{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.stake{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:12px 0 10px;font-family:var(--cond);font-weight:700;font-size:24px;text-align:center;transition:.12s}
+.stake small{display:block;font:600 10px Inter;color:var(--dim);letter-spacing:1px;margin-top:-2px}
+.stake.on{background:var(--ice);color:#06263a;border-color:var(--ice);transform:translateY(-2px);box-shadow:0 8px 20px -8px var(--ice)}
+.stake.on small{color:#0b4664}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:9px 14px;font-size:14px;font-weight:500;color:var(--mut)}
+.pill.on{color:#06263a;background:var(--ice);border-color:var(--ice);font-weight:600}
+input[type=datetime-local]{width:100%;margin-top:10px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;color:var(--tx);padding:12px;font:500 15px Inter;color-scheme:dark;outline:none}
+.note{font-size:13px;color:var(--mut);margin-top:10px;display:flex;gap:6px;align-items:center}
+.cta{width:100%;margin:6px 0 4px;padding:17px;border-radius:16px;background:var(--ice);color:#06263a;font:800 20px var(--cond);letter-spacing:1.5px;text-transform:uppercase;box-shadow:0 12px 30px -12px var(--ice)}
+.cta:disabled{opacity:.5}
+.err{color:var(--loss);font-size:13px;text-align:center;min-height:18px;margin-top:6px}
+
+/* Wettschein */
+.tk{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:12px;overflow:hidden;position:relative}
+.tk-top{padding:14px 16px 12px}
+.tk-meta{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mut)}
+.tk-meta .id{font-family:var(--cond);font-weight:700;font-size:15px;color:var(--dim)}
+.tk h3{font-size:18px;font-weight:700;line-height:1.3;margin:10px 0 12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:5px 10px;border-radius:99px;background:var(--card2);color:var(--mut)}
+.chip.stk{color:var(--ice);background:rgba(90,209,255,.1)}
+.chip.ok{color:var(--win);background:rgba(180,244,97,.1)}
+.chip.bad{color:var(--loss);background:rgba(255,93,115,.1)}
+.chip.gold{color:var(--gold);background:rgba(255,201,74,.12)}
+.perf{height:0;border-top:2px dashed var(--line);margin:0 14px;position:relative}
+.perf:before,.perf:after{content:'';position:absolute;top:-10px;width:18px;height:18px;border-radius:50%;background:var(--bg)}
+.perf:before{left:-24px}.perf:after{right:-24px}
+.tk-bot{padding:12px 16px 14px}
+.deal{display:flex;align-items:center;gap:10px;padding:6px 0}
+.deal span{flex:1;font-weight:500}
+.deal time{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+.x{width:26px;height:26px;border-radius:50%;background:rgba(255,93,115,.12);color:var(--loss);font-size:14px;line-height:1}
+.empty{color:var(--dim);font-size:14px;padding:4px 0}
+.result{margin:2px 0 10px;padding:12px;border-radius:14px;background:linear-gradient(135deg,rgba(180,244,97,.13),rgba(180,244,97,.03));border:1px solid rgba(180,244,97,.18)}
+.result.void{background:var(--card2);border-color:var(--line)}
+.result b{font:800 20px var(--cond);letter-spacing:.8px;text-transform:uppercase;color:var(--win)}
+.result.void b{color:var(--mut)}
+.result p{font-size:12px;color:var(--mut);margin-top:2px}
+.bil{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.adm{display:flex;gap:8px;margin-top:12px}
+.adm button{flex:1;padding:10px;border-radius:12px;background:var(--card2);font-size:13px;font-weight:600;color:var(--mut);border:1px solid var(--line)}
+.tk.arch .tk-top{padding-bottom:14px}
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px;margin:0 0 12px}
+.seg button{flex:1;padding:8px;border-radius:9px;font-size:13px;font-weight:600;color:var(--mut)}
+.seg button.on{background:var(--card2);color:var(--tx)}
+
+/* Rangliste */
+.podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:8px;margin:10px 0 14px}
+.pod{display:flex;flex-direction:column;align-items:center;gap:6px}
+.pod .name{font-weight:600;font-size:14px}
+.pod .num{font-size:22px}
+.block{width:100%;border-radius:14px 14px 6px 6px;display:grid;place-items:center;font:800 30px var(--cond);color:rgba(10,16,32,.75)}
+.p1 .block{height:92px;background:linear-gradient(180deg,var(--gold),#d99a19)}
+.p2 .block{height:68px;background:linear-gradient(180deg,var(--silver),#8e9bb3)}
+.p3 .block{height:52px;background:linear-gradient(180deg,var(--bronze),#a9622e)}
+.p1 .av{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--gold)}
+.crown{font-size:20px;margin-bottom:-4px}
+.rows{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.rw{display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line);position:relative}
+.rw:first-child{border-top:0}
+.rw.mine{background:rgba(90,209,255,.06)}
+.rk{width:20px;font:700 17px var(--cond);color:var(--dim);text-align:center}
+.rw .who{flex:1;min-width:0}
+.rw .who b{font-weight:600;display:block}
+.rw .who small{font-size:12px;color:var(--mut)}
+.rw .num{font-size:22px;text-align:right}
+.bar{position:absolute;left:0;bottom:0;height:2px;border-radius:2px}
+.pos{color:var(--win)} .neg{color:var(--loss)}
+.danger{width:100%;margin-top:14px;padding:14px;border-radius:14px;border:1px solid rgba(255,93,115,.35);color:var(--loss);font-weight:600}
+
+/* Navigation */
+nav{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));display:flex;background:rgba(20,30,51,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;padding:6px;z-index:9}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 6px;border-radius:16px;font-size:11px;font-weight:600;color:var(--dim);position:relative}
+nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+nav button.on{color:var(--ice);background:rgba(90,209,255,.1)}
+nav .badge{position:absolute;top:3px;right:calc(50% - 22px);min-width:17px;height:17px;padding:0 5px;border-radius:9px;background:var(--loss);color:#fff;font-size:10px;display:grid;place-items:center}
+.center{text-align:center;color:var(--mut);padding:60px 20px}
+.reg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px}
+.reg .person .av{opacity:1}
+.reg .person:disabled{opacity:.3}
+@keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:none;opacity:1}}
+.anim>*{animation:pop .25s ease both}
+</style>
+</head>
+<body>
+<div id="app"><div class="center">Lädt …</div></div>
+
+<script>
+/* ↓↓↓ HIER DEINE APPS-SCRIPT-URL EINTRAGEN (endet auf /exec) ↓↓↓ */
+const API = 'HIER_APPS_SCRIPT_URL_EINFUEGEN';
+/* ↑↑↑ */
+
+const tg = window.Telegram && Telegram.WebApp;
+if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor('#0a1020'); tg.setBackgroundColor('#0a1020'); } catch (e) {} }
+const S = { tab: 'neu', d: null, ersteller: null, einsatz: null, dl: 'keine', dlEigen: '', text: '', archivFilter: 'alle' };
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const chf = (n, vz) => { const a = String(Math.abs(Math.round(n))).replace(/\B(?=(\d{3})+(?!\d))/g, "'"); return (n < 0 ? '−' : vz && n > 0 ? '+' : '') + a; };
+const haptic = t => { try { tg.HapticFeedback.notificationOccurred(t); } catch (e) {} };
+const tap = () => { try { tg.HapticFeedback.selectionChanged(); } catch (e) {} };
+const TZ = 'Europe/Zurich';
+const f = (ts, o) => new Intl.DateTimeFormat('de-CH', Object.assign({ timeZone: TZ }, o)).format(new Date(ts));
+const zeit = ts => f(ts, { hour: '2-digit', minute: '2-digit' });
+const tag = ts => { const h = f(Date.now(), { day: '2-digit', month: '2-digit' }), d = f(ts, { day: '2-digit', month: '2-digit' });
+  const g = f(Date.now() - 864e5, { day: '2-digit', month: '2-digit' }), m = f(Date.now() + 864e5, { day: '2-digit', month: '2-digit' });
+  return d === h ? 'heute' : d === g ? 'gestern' : d === m ? 'morgen' : f(ts, { weekday: 'short' }) + ' ' + d; };
+const wann = ts => tag(ts) + ' ' + zeit(ts);
+const rest = ts => { let m = Math.round((ts - Date.now()) / 6e4); if (m <= 0) return null; const h = Math.floor(m / 60); m %= 60;
+  return h >= 24 ? Math.floor(h / 24) + ' T ' + (h % 24) + ' h' : h ? h + ' h ' + m + ' min' : m + ' min'; };
+const FARBEN = ['#5ad1ff', '#b4f461', '#ffc94a', '#ff8fa3', '#b49cff', '#5ef0c2', '#ffa95a', '#7aa8ff', '#f78cff'];
+const farbe = n => FARBEN[[...n].reduce((a, c) => a + c.charCodeAt(0), 0) % FARBEN.length];
+const av = (n, k) => '<div class="av ' + (k || '') + '" style="background:' + farbe(n) + '">' + esc(n.slice(0, 2)) + '</div>';
+const icon = { neu: '<path d="M12 5v14M5 12h14"/>', lauf: '<rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="15" r="1"/><circle cx="15" cy="9" r="1"/><circle cx="9" cy="15" r="1"/>',
+  arch: '<rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9M10 13h4"/>',
+  rang: '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM17 6h3v2a3 3 0 0 1-3 3M7 6H4v2a3 3 0 0 0 3 3"/>' };
+
+async function call(action, extra) {
+  const r = await fetch(API, { method: 'POST', body: JSON.stringify(Object.assign({ action, initData: tg ? tg.initData : '' }, extra || {})) });
+  return r.json();
+}
+async function load() {
+  try { const d = await call('init'); if (!d.ok) return fehler(d.error); setze(d); }
+  catch (e) { fehler('Keine Verbindung zum Server.'); }
+}
+function setze(d) { S.d = d; if (!S.ersteller) S.ersteller = d.ich; render(); }
+function fehler(t) { $('#app').innerHTML = '<div class="center">⚠️<br><br>' + esc(t) + '</div>'; }
+function bestaetigen(t, fn) { tg && tg.showConfirm ? tg.showConfirm(t, y => y && fn()) : confirm(t) && fn(); }
+async function admin(action, extra, frage) {
+  const go = async () => { const r = await call(action, extra); if (!r.ok) { haptic('error'); return tg ? tg.showAlert(r.error) : alert(r.error); } haptic('success'); setze(r); };
+  frage ? bestaetigen(frage, go) : go();
+}
+
+/* ---------- Rahmen ---------- */
+function render() {
+  const d = S.d;
+  if (!d.ich) return renderRegister();
+  const mein = d.tabelle.find(s => s.name === d.ich) || { saldo: 0 };
+  const offen = d.laufend.filter(w => w.status === 'offen').length;
+  const tabs = [['neu', 'Neu', icon.neu], ['lauf', 'Laufend', icon.lauf, offen], ['arch', 'Archiv', icon.arch], ['rang', 'Rangliste', icon.rang]];
+  $('#app').innerHTML =
+    '<header><div class="logo"><i>🎲</i>Wettbüro</div><div class="me">' + av(d.ich, 's') +
+      '<b class="' + (mein.saldo >= 0 ? 'pos' : 'neg') + '">' + chf(mein.saldo, true) + '</b></div></header>' +
+    '<div id="view" class="anim">' + ({ neu: viewNeu, lauf: viewLauf, arch: viewArch, rang: viewRang })[S.tab]() + '</div>' +
+    '<nav>' + tabs.map(t => '<button data-tab="' + t[0] + '" class="' + (S.tab === t[0] ? 'on' : '') + '"><svg viewBox="0 0 24 24">' + t[2] + '</svg>' + t[1] +
+      (t[3] ? '<span class="badge">' + t[3] + '</span>' : '') + '</button>').join('') + '</nav>';
+  document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { if (S.tab === 'neu') merke(); S.tab = b.dataset.tab; tap(); render(); scrollTo(0, 0); });
+  ({ neu: bindNeu, lauf: bindListe, arch: bindListe, rang: bindRang })[S.tab]();
+}
+
+function renderRegister() {
+  const d = S.d;
+  $('#app').innerHTML = '<header><div class="logo"><i>🎲</i>Wettbüro</div></header><h1>Wer bist du?<small>Nur einmal nötig – danach erkennt dich die App automatisch.</small></h1>' +
+    '<main><div class="sec"><div class="reg">' + d.namen.map(n => '<button class="person" data-n="' + esc(n) + '"' + (d.frei.indexOf(n) < 0 ? ' disabled' : '') + '>' + av(n) + esc(n) + '</button>').join('') +
+    '</div></div><div class="err" id="err"></div></main>';
+  document.querySelectorAll('[data-n]').forEach(b => b.onclick = () => bestaetigen('Bist du ' + b.dataset.n + '?', async () => {
+    const r = await call('register', { name: b.dataset.n });
+    if (!r.ok) return ($('#err').textContent = r.error);
+    haptic('success'); S.ersteller = r.ich; setze(r);
+  }));
+}
+
+/* ---------- Neue Wette ---------- */
+function dlOptionen() {
+  const o = [['keine', 'Keine']], jetzt = new Date();
+  const heute = new Date(); heute.setHours(19, 45, 0, 0);
+  if (heute > jetzt) o.push(['heute', 'Heute 19:45']);
+  o.push(['morgen', 'Morgen 19:45'], ['eigen', 'Eigene …']);
+  return o;
+}
+function dlWert() {
+  if (S.dl === 'heute' || S.dl === 'morgen') { const t = new Date(); if (S.dl === 'morgen') t.setDate(t.getDate() + 1); t.setHours(19, 45, 0, 0); return t; }
+  if (S.dl === 'eigen' && S.dlEigen) return new Date(S.dlEigen);
+  return null;
+}
+function viewNeu() {
+  const d = S.d, dl = dlWert();
+  return '<h1>Neue Wette<small>Wird sofort ins Wettbüro gepostet.</small></h1><main>' +
+    (d.admin ? '<div class="sec"><div class="lbl">Wettplatzierer</div><div class="people">' +
+      d.namen.map(n => '<button class="person' + (S.ersteller === n ? ' on' : '') + '" data-e="' + esc(n) + '">' + av(n) + esc(n) + '</button>').join('') + '</div></div>' : '') +
+    '<div class="sec"><div class="lbl">Deine Wette</div><textarea id="text" maxlength="200" placeholder="z.B. ZSC schlägt Bern nach Verlängerung">' + esc(S.text) + '</textarea></div>' +
+    '<div class="sec"><div class="lbl">Einsatz <span>pro Deal</span></div><div class="stakes">' +
+      d.einsaetze.map(x => '<button class="stake' + (S.einsatz === x ? ' on' : '') + '" data-x="' + x + '">' + x + '<small>CHF</small></button>').join('') + '</div></div>' +
+    '<div class="sec"><div class="lbl">Deal-Schluss <span>freiwillig</span></div><div class="pills">' +
+      dlOptionen().map(o => '<button class="pill' + (S.dl === o[0] ? ' on' : '') + '" data-dl="' + o[0] + '">' + o[1] + '</button>').join('') + '</div>' +
+      (S.dl === 'eigen' ? '<input type="datetime-local" id="dlx" value="' + esc(S.dlEigen) + '">' : '') +
+      '<div class="note">' + (dl ? '🔒 Ab <b>' + wann(dl.getTime()) + '</b> sind keine Deals mehr möglich.' : '♾️ Deals bleiben offen, bis entschieden ist.') + '</div></div>' +
+    '<button class="cta" id="go">Wette platzieren</button><div class="err" id="err"></div></main>';
+}
+function merke() { const t = $('#text'); if (t) S.text = t.value; const x = $('#dlx'); if (x) S.dlEigen = x.value; }
+function bindNeu() {
+  const re = () => { merke(); tap(); const y = scrollY; render(); scrollTo(0, y); };
+  document.querySelectorAll('[data-e]').forEach(b => b.onclick = () => { S.ersteller = b.dataset.e; re(); });
+  document.querySelectorAll('[data-x]').forEach(b => b.onclick = () => { S.einsatz = Number(b.dataset.x); re(); });
+  document.querySelectorAll('[data-dl]').forEach(b => b.onclick = () => { S.dl = b.dataset.dl; re(); });
+  const x = $('#dlx'); if (x) x.onchange = re;
+  $('#go').onclick = senden;
+}
+async function senden() {
+  merke();
+  const err = t => { $('#err').textContent = t; haptic('error'); };
+  const dl = dlWert();
+  if (!S.text.trim()) return err('Bitte die Wette eingeben.');
+  if (!S.einsatz) return err('Bitte einen Einsatz wählen.');
+  if (S.dl === 'eigen' && !dl) return err('Bitte Datum und Zeit für den Deal-Schluss wählen.');
+  if (dl && dl <= new Date()) return err('Der Deal-Schluss liegt in der Vergangenheit.');
+  const b = $('#go'); b.disabled = true; b.textContent = 'Wird gepostet …';
+  try {
+    const r = await call('create', { text: S.text.trim(), einsatz: S.einsatz, ersteller: S.ersteller, deadline: dl ? dl.toISOString() : '' });
+    if (!r.ok) { b.disabled = false; b.textContent = 'Wette platzieren'; return err(r.error); }
+    haptic('success'); Object.assign(S, { text: '', einsatz: null, dl: 'keine', dlEigen: '' });
+    tg && tg.showAlert ? tg.showAlert('✅ Wette #' + r.id + ' ist im Wettbüro!', () => tg.close()) : load();
+  } catch (e) { b.disabled = false; b.textContent = 'Wette platzieren'; err('Keine Verbindung. Nochmals versuchen.'); }
+}
+
+/* ---------- Wettscheine ---------- */
+function ticket(w, imArchiv) {
+  const d = S.d, A = d.admin;
+  let chips = '<span class="chip stk">💰 ' + w.einsatz + ' CHF / Deal</span>';
+  if (w.status === 'offen' && w.deadline) {
+    const r = rest(w.deadline);
+    chips += r ? '<span class="chip gold">⏰ noch ' + r + '</span>' : '<span class="chip bad">🔒 Deals zu</span>';
+  }
+  let res = '';
+  if (w.status === 'entschieden') {
+    res = '<div class="result"><b>' + (w.gewinner === 'E' ? '🏆 Wettplatzierer gewinnt' : '🏆 Dealer gewinnen') + '</b>' +
+      '<p>eingetragen von ' + esc(w.entschiedenVon) + ' · ' + wann(w.entschieden) + (imArchiv ? '' : ' · Archiv ' + (rest(w.archivAb) ? 'in ' + rest(w.archivAb) : 'in Kürze')) + '</p>' +
+      '<div class="bil">' + w.bilanz.map(x => '<span class="chip ' + (x.betrag >= 0 ? 'ok' : 'bad') + '">' + esc(x.name) + ' ' + chf(x.betrag, true) + '</span>').join('') + '</div></div>';
+  } else if (w.status === 'storniert') {
+    res = '<div class="result void"><b>Storniert</b><p>Zählt nicht für die Rangliste.</p></div>';
+  }
+  const deals = w.deals.length ? w.deals.map(x => '<div class="deal">' + av(x.name, 's') + '<span>' + esc(x.name) + '</span><time>' + wann(x.zeit) + '</time>' +
+      (A && !imArchiv ? '<button class="x" data-weg="' + w.id + '|' + esc(x.name) + '" aria-label="Deal löschen">✕</button>' : '') + '</div>').join('')
+    : '<div class="empty">' + (imArchiv ? 'Keine Deals' : 'Noch keine Deals – wer traut sich?') + '</div>';
+  let adm = '';
+  if (A) {
+    const b = [];
+    if (w.status !== 'offen') b.push('<button data-undo="' + w.id + '">↩︎ ' + (imArchiv ? 'Zurückholen' : 'Rückgängig') + '</button>');
+    if (!imArchiv) b.push('<button data-arch="' + w.id + '">📦 ' + (w.status === 'offen' ? 'Stornieren' : 'Archivieren') + '</button>');
+    adm = b.length ? '<div class="adm">' + b.join('') + '</div>' : '';
+  }
+  return '<div class="tk' + (imArchiv ? ' arch' : '') + '"><div class="tk-top"><div class="tk-meta">' + av(w.ersteller, 's') +
+    '<b style="color:var(--tx)">' + esc(w.ersteller) + '</b><span>· ' + wann(w.erstellt) + '</span><span class="id" style="margin-left:auto">#' + w.id + '</span></div>' +
+    '<h3>' + esc(w.text) + '</h3><div class="chips">' + chips + '</div></div><div class="perf"></div><div class="tk-bot">' + res +
+    '<div class="lbl" style="margin:0 0 4px">🤝 Deals <span>' + w.deals.length + '</span></div>' + deals + adm + '</div></div>';
+}
+function viewLauf() {
+  const l = S.d.laufend;
+  return '<h1>Laufend<small>' + l.filter(w => w.status === 'offen').length + ' offen · entschiedene gehen 16 h nach Start ins Archiv</small></h1><main>' +
+    (l.length ? l.map(w => ticket(w, false)).join('') : '<div class="center">Gerade keine Wetten.<br>Zeit für eine neue? 🎲</div>') + '</main>';
+}
+function viewArch() {
+  const d = S.d, mine = S.archivFilter === 'mine';
+  const l = d.archiv.filter(w => !mine || w.ersteller === d.ich || w.deals.some(x => x.name === d.ich));
+  return '<h1>Archiv<small>Abgeschlossene Wetten mit allen Zeiten.</small></h1><main><div class="seg">' +
+    [['alle', 'Alle'], ['mine', 'Nur meine']].map(o => '<button data-f="' + o[0] + '" class="' + (S.archivFilter === o[0] ? 'on' : '') + '">' + o[1] + '</button>').join('') + '</div>' +
+    (l.length ? l.map(w => ticket(w, true)).join('') : '<div class="center">Noch nichts im Archiv.</div>') + '</main>';
+}
+function bindListe() {
+  document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { S.archivFilter = b.dataset.f; tap(); render(); });
+  document.querySelectorAll('[data-weg]').forEach(b => b.onclick = () => { const [id, n] = b.dataset.weg.split('|'); admin('dealWeg', { id, name: n }, 'Deal von ' + n + ' bei Wette #' + id + ' löschen?'); });
+  document.querySelectorAll('[data-undo]').forEach(b => b.onclick = () => admin('undo', { id: b.dataset.undo }, 'Wette #' + b.dataset.undo + ' wieder öffnen? Das Ergebnis wird entfernt.'));
+  document.querySelectorAll('[data-arch]').forEach(b => b.onclick = () => admin('arch', { id: b.dataset.arch }, 'Wette #' + b.dataset.arch + ' jetzt ins Archiv? Offene Wetten werden storniert.'));
+}
+
+/* ---------- Rangliste ---------- */
+function viewRang() {
+  const d = S.d, t = d.tabelle, max = Math.max(1, ...t.map(s => Math.abs(s.saldo)));
+  const pod = (s, k, platz) => s ? '<div class="pod ' + k + '">' + (platz === 1 ? '<div class="crown">👑</div>' : '') + av(s.name, 'l') +
+    '<div class="name">' + esc(s.name) + '</div><div class="num ' + (s.saldo >= 0 ? 'pos' : 'neg') + '">' + chf(s.saldo, true) + '</div><div class="block">' + platz + '</div></div>' : '<div></div>';
+  return '<h1>Rangliste<small>Saldo in CHF · W = Wetten · D = Deals</small></h1><main>' +
+    '<div class="podium">' + pod(t[1], 'p2', 2) + pod(t[0], 'p1', 1) + pod(t[2], 'p3', 3) + '</div>' +
+    '<div class="rows">' + t.map((s, i) => '<div class="rw' + (s.name === d.ich ? ' mine' : '') + '"><div class="rk">' + (i + 1) + '</div>' + av(s.name) +
+      '<div class="who"><b>' + esc(s.name) + '</b><small>' + s.wetten + ' W · ' + s.deals + ' D</small></div>' +
+      '<div class="num ' + (s.saldo >= 0 ? 'pos' : 'neg') + '">' + chf(s.saldo, true) + '</div>' +
+      '<div class="bar" style="width:' + Math.round(Math.abs(s.saldo) / max * 100) + '%;background:var(--' + (s.saldo >= 0 ? 'win' : 'loss') + ');opacity:.5"></div></div>').join('') + '</div>' +
+    (d.admin ? '<div class="sec" style="margin-top:14px"><div class="lbl">Anmeldungen <span>' + d.angemeldet.length + ' / ' + d.namen.length + '</span></div>' +
+      d.namen.map(n => '<div class="deal">' + av(n, 's') + '<span>' + esc(n) + '</span>' +
+        (d.angemeldet.indexOf(n) < 0 ? '<time>noch frei</time>' : n === d.ich ? '<time>du</time>' : '<button class="pill" data-frei="' + esc(n) + '">Freigeben</button>') + '</div>').join('') +
+      '<div class="note">„Freigeben“ löst den Namen vom Telegram-Konto, z.B. nach einem Test.</div></div>' +
+      '<button class="danger" id="reset">🔄 Saison zurücksetzen</button><div class="note" style="justify-content:center">Der Endstand wird vorher im Google Sheet gespeichert.</div>' : '') +
+    '</main>';
+}
+function bindRang() {
+  document.querySelectorAll('[data-frei]').forEach(b => b.onclick = () => admin('freigeben', { name: b.dataset.frei }, b.dataset.frei + ' freigeben? Danach kann sich jemand neu als ' + b.dataset.frei + ' anmelden.'));
+  const r = $('#reset'); if (!r) return;
+  r.onclick = () => bestaetigen('Wirklich alle Salden auf 0 setzen? Der Endstand wird gespeichert.',
+    () => bestaetigen('Ganz sicher? Das startet eine neue Saison.', () => admin('reset')));
+}
+
+load();
+setInterval(() => { if (S.d && S.tab === 'lauf') { const y = scrollY; render(); scrollTo(0, y); } }, 60000);
+</script>
+</body>
+</html>
