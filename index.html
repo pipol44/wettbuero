@@ -30,7 +30,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:10p
 h1{font-family:var(--cond);font-weight:800;font-size:22px;letter-spacing:.5px;text-transform:uppercase;padding:2px 14px 8px;line-height:1}
 h1 small{display:block;font:500 11.5px Inter;color:var(--mut);text-transform:none;letter-spacing:0;margin-top:6px}
 main{padding:0 10px}
-.sec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 11px;margin-bottom:7px}
 .lbl{font-size:10.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mut);margin-bottom:7px;display:flex;justify-content:space-between}
 
 /* Avatare */
@@ -44,20 +44,21 @@ main{padding:0 10px}
 .person.on{color:var(--tx);font-weight:600}
 .person.on .av{opacity:1;box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--ice)}
 
-textarea{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:14px;color:var(--tx);padding:9px 11px;font:500 14px Inter;min-height:46px;resize:none;outline:none}
+textarea{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:14px;color:var(--tx);padding:8px 10px;font:500 14px Inter;min-height:40px;resize:none;outline:none}
 textarea:focus,input:focus{border-color:var(--ice)}
 textarea::placeholder{color:var(--dim)}
 .stakes{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.stake{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:5px 0 4px;font-family:var(--cond);font-weight:700;font-size:18px;text-align:center;transition:.12s}
+.stake{background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:4px 0 3px;font-family:var(--cond);font-weight:700;font-size:16px;text-align:center;transition:.12s}
 .stake small{display:none}
 .stake.on{background:var(--ice);color:#06263a;border-color:var(--ice)}
 .stake.on small{color:#0b4664}
 .pills{display:flex;flex-wrap:wrap;gap:8px}
 .pill{background:var(--bg2);border:1px solid var(--line);border-radius:99px;padding:5px 10px;font-size:12px;font-weight:500;color:var(--mut)}
 .pill.on{color:#06263a;background:var(--ice);border-color:var(--ice);font-weight:600}
-input[type=datetime-local]{width:100%;margin-top:8px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;color:var(--tx);padding:8px 10px;font:500 13px Inter;color-scheme:dark;outline:none}
+.dlrow{display:flex;gap:6px;align-items:center}.dlclr{width:32px;height:32px;flex:none;border-radius:9px;background:var(--bg2);border:1px solid var(--line);color:var(--mut);font-size:12px}
+input[type=datetime-local]{width:100%;margin-top:0;background:var(--bg2);border:1px solid var(--line);border-radius:10px;color:var(--tx);padding:8px 10px;font:500 13px Inter;color-scheme:dark;outline:none}
 .note{font-size:11.5px;color:var(--mut);margin-top:6px;display:flex;gap:6px;align-items:center}
-.cta{width:100%;margin:2px 0 4px;padding:10px;border-radius:12px;background:var(--ice);color:#06263a;font:800 16px var(--cond);letter-spacing:1.5px;text-transform:uppercase}
+.cta{width:100%;margin:2px 0 4px;padding:9px;border-radius:11px;background:var(--ice);color:#06263a;font:800 15px var(--cond);letter-spacing:1.5px;text-transform:uppercase}
 .cta:disabled{opacity:.5}
 .err{color:var(--loss);font-size:13px;text-align:center;min-height:18px;margin-top:6px}
 
@@ -131,6 +132,36 @@ nav .badge{position:absolute;top:3px;right:calc(50% - 22px);min-width:17px;heigh
 .reg .person:disabled{opacity:.3}
 @keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:none;opacity:1}}
 .anim>*{animation:pop .25s ease both}
+
+.tk{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:6px;padding:8px 10px}
+.tk-meta{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mut)}
+.tk-meta b{color:var(--tx);font-size:12px}
+.tk-meta .id{margin-left:auto;font-family:var(--cond);font-weight:700;font-size:12px;color:var(--dim)}
+.ib{width:24px;height:24px;border-radius:7px;background:var(--card2);font-size:12px;color:var(--mut);flex:none}
+.tk h3{font-size:14px;font-weight:600;line-height:1.3;margin:4px 0 5px}
+.chip{font-size:10.5px;padding:2px 7px}
+.dl{display:flex;gap:6px;align-items:flex-start;margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
+.dlab{font:800 12px var(--cond);color:var(--ice);background:rgba(90,209,255,.1);border-radius:5px;padding:1px 5px;flex:none;margin-top:1px}
+.dcs{display:flex;flex-wrap:wrap;gap:4px}
+.dc{display:inline-flex;align-items:center;gap:5px;background:var(--card2);border-radius:99px;padding:2px 4px 2px 8px;font-size:11.5px;font-weight:500}
+.dc time{color:var(--mut);font-size:10.5px;font-weight:400;padding-right:4px}
+.dx{width:16px;height:16px;border-radius:50%;background:rgba(255,93,115,.15);color:var(--loss);font-size:9px;line-height:1;margin-left:-2px}
+.tk .empty{font-size:11.5px;padding:1px 0}
+.tk .bil{margin-top:5px;gap:4px}
+.tk.winW{border:3px solid var(--ice);box-shadow:0 0 0 3px rgba(90,209,255,.08)}
+.tk.winD{border:3px solid var(--gold);box-shadow:0 0 0 3px rgba(255,201,74,.08)}
+.amt{display:inline-block;font:700 12px Inter;color:var(--ice);background:rgba(90,209,255,.1);border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px;white-space:nowrap}
+.chips.one,.dcs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips.one::-webkit-scrollbar,.dcs::-webkit-scrollbar{display:none}
+.chips.one .chip,.dc{flex:none;white-space:nowrap}
+.chips.one .chip{font-size:10px;padding:2px 6px;gap:3px}
+.dc{font-size:11px;padding:2px 3px 2px 7px}
+.dl{align-items:center}
+.dnames{font-size:11px;font-weight:500;margin-top:4px;line-height:1.35}
+.ib.on{background:var(--ice);color:#06263a}
+.info{margin-top:6px;padding:6px 8px;border-radius:9px;background:var(--bg2);font-size:11.5px}
+.info div{display:flex;justify-content:space-between;gap:8px;padding:2px 0}
+.info time{color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -170,7 +201,7 @@ async function call(action, extra) {
   return r.json();
 }
 async function load() {
-  try { const d = await call('init'); if (!d.ok) return fehler(d.error); setze(d); }
+  try { const d = await call('init', { base: location.href.split('#')[0].split('?')[0].replace(/[^/]*$/, '') }); if (!d.ok) return fehler(d.error); setze(d); }
   catch (e) { fehler('Keine Verbindung zum Server.'); }
 }
 function setze(d) { S.d = d; if (!S.ersteller) S.ersteller = d.ich; render(); }
@@ -211,39 +242,25 @@ function renderRegister() {
 }
 
 /* ---------- Neue Wette ---------- */
-function dlOptionen() {
-  const o = [['keine', 'Keine']], jetzt = new Date();
-  const heute = new Date(); heute.setHours(19, 45, 0, 0);
-  if (heute > jetzt) o.push(['heute', 'Heute 19:45']);
-  o.push(['morgen', 'Morgen 19:45'], ['eigen', 'Eigene …']);
-  return o;
-}
-function dlWert() {
-  if (S.dl === 'heute' || S.dl === 'morgen') { const t = new Date(); if (S.dl === 'morgen') t.setDate(t.getDate() + 1); t.setHours(19, 45, 0, 0); return t; }
-  if (S.dl === 'eigen' && S.dlEigen) return new Date(S.dlEigen);
-  return null;
-}
+function dlWert() { return S.dlEigen ? new Date(S.dlEigen) : null; }
 function viewNeu() {
   const d = S.d, dl = dlWert();
   return '<h1>Neue Wette</h1><main>' +
-    (d.admin ? '<div class="sec"><div class="lbl">Wettplatzierer</div><div class="people">' +
-      d.namen.map(n => '<button class="person' + (S.ersteller === n ? ' on' : '') + '" data-e="' + esc(n) + '">' + av(n) + esc(n) + '</button>').join('') + '</div></div>' : '') +
-    '<div class="sec"><div class="lbl">Deine Wette</div><textarea id="text" maxlength="200" placeholder="z.B. ZSC schlägt Bern nach Verlängerung">' + esc(S.text) + '</textarea></div>' +
-    '<div class="sec"><div class="lbl">Einsatz <span>pro Deal</span></div><div class="stakes">' +
-      d.einsaetze.map(x => '<button class="stake' + (S.einsatz === x ? ' on' : '') + '" data-x="' + x + '">' + x + '<small>CHF</small></button>').join('') + '</div></div>' +
-    '<div class="sec"><div class="lbl">Deal-Schluss <span>freiwillig</span></div><div class="pills">' +
-      dlOptionen().map(o => '<button class="pill' + (S.dl === o[0] ? ' on' : '') + '" data-dl="' + o[0] + '">' + o[1] + '</button>').join('') + '</div>' +
-      (S.dl === 'eigen' ? '<input type="datetime-local" id="dlx" value="' + esc(S.dlEigen) + '">' : '') +
-      '<div class="note">' + (dl ? '🔒 Ab <b>' + wann(dl.getTime()) + '</b> sind keine Deals mehr möglich.' : '♾️ Deals bleiben offen, bis entschieden ist.') + '</div></div>' +
+    '<div class="sec"><div class="lbl">Wette</div><textarea id="text" maxlength="200">' + esc(S.text) + '</textarea></div>' +
+    '<div class="sec"><div class="lbl">Einsatz <span>CHF pro Deal</span></div><div class="stakes">' +
+      d.einsaetze.map(x => '<button class="stake' + (S.einsatz === x ? ' on' : '') + '" data-x="' + x + '">' + x + '</button>').join('') + '</div></div>' +
+    '<div class="sec"><div class="lbl">Deadline <span>freiwillig</span></div>' +
+      '<div class="dlrow"><input type="datetime-local" id="dlx" value="' + esc(S.dlEigen) + '">' +
+      (S.dlEigen ? '<button class="dlclr" id="dlclr" aria-label="Deadline entfernen">✕</button>' : '') + '</div>' +
+      (dl ? '<div class="note">🔒 Ab ' + wann(dl.getTime()) + ' keine Deals mehr.</div>' : '') + '</div>' +
     '<button class="cta" id="go">Wette platzieren</button><div class="err" id="err"></div></main>';
 }
 function merke() { const t = $('#text'); if (t) S.text = t.value; const x = $('#dlx'); if (x) S.dlEigen = x.value; }
 function bindNeu() {
   const re = () => { merke(); tap(); const y = scrollY; render(); scrollTo(0, y); };
-  document.querySelectorAll('[data-e]').forEach(b => b.onclick = () => { S.ersteller = b.dataset.e; re(); });
   document.querySelectorAll('[data-x]').forEach(b => b.onclick = () => { S.einsatz = Number(b.dataset.x); re(); });
-  document.querySelectorAll('[data-dl]').forEach(b => b.onclick = () => { S.dl = b.dataset.dl; re(); });
-  const x = $('#dlx'); if (x) x.onchange = re;
+  $('#dlx').onchange = re;
+  const c = $('#dlclr'); if (c) c.onclick = () => { merke(); S.dlEigen = ''; tap(); render(); };
   $('#go').onclick = senden;
 }
 async function senden() {
@@ -252,65 +269,68 @@ async function senden() {
   const dl = dlWert();
   if (!S.text.trim()) return err('Bitte die Wette eingeben.');
   if (!S.einsatz) return err('Bitte einen Einsatz wählen.');
-  if (S.dl === 'eigen' && !dl) return err('Bitte Datum und Zeit für den Deal-Schluss wählen.');
-  if (dl && dl <= new Date()) return err('Der Deal-Schluss liegt in der Vergangenheit.');
+  if (dl && dl <= new Date()) return err('Die Deadline liegt in der Vergangenheit.');
   const b = $('#go'); b.disabled = true; b.textContent = 'Wird gepostet …';
   try {
-    const r = await call('create', { text: S.text.trim(), einsatz: S.einsatz, ersteller: S.ersteller, deadline: dl ? dl.toISOString() : '' });
+    const r = await call('create', { text: S.text.trim(), einsatz: S.einsatz, deadline: dl ? dl.toISOString() : '' });
     if (!r.ok) { b.disabled = false; b.textContent = 'Wette platzieren'; return err(r.error); }
-    haptic('success'); Object.assign(S, { text: '', einsatz: null, dl: 'keine', dlEigen: '' });
+    haptic('success'); Object.assign(S, { text: '', einsatz: null, dlEigen: '' });
     tg && tg.showAlert ? tg.showAlert('✅ Wette #' + r.id + ' ist im Wettbüro!', () => tg.close()) : load();
   } catch (e) { b.disabled = false; b.textContent = 'Wette platzieren'; err('Keine Verbindung. Nochmals versuchen.'); }
 }
 
-/* ---------- Wettscheine ---------- */
+/* ---------- Wettscheine (kompakt) ---------- */
 function ticket(w, imArchiv) {
   const d = S.d, A = d.admin;
-  let chips = '<span class="chip stk">💰 ' + w.einsatz + ' CHF / Deal</span>';
+  let meta = '';
   if (w.status === 'offen' && w.deadline) {
     const r = rest(w.deadline);
-    chips += r ? '<span class="chip gold">⏰ noch ' + r + '</span>' : '<span class="chip bad">🔒 Deals zu</span>';
+    meta += r ? '<span class="chip gold">⏰ ' + r + '</span>' : '<span class="chip bad">🔒 Deadline vorbei</span>';
   }
-  let res = '';
   if (w.status === 'entschieden') {
-    res = '<div class="result"><b>' + (w.gewinner === 'E' ? '🏆 Wettplatzierer gewinnt' : '🏆 Dealer gewinnen') + '</b>' +
-      '<p>eingetragen von ' + esc(w.entschiedenVon) + ' · ' + wann(w.entschieden) + (imArchiv ? '' : ' · Archiv ' + (rest(w.archivAb) ? 'in ' + rest(w.archivAb) : 'in Kürze')) + '</p>' +
-      '<div class="bil">' + w.bilanz.map(x => '<span class="chip ' + (x.betrag >= 0 ? 'ok' : 'bad') + '">' + esc(x.name) + ' ' + chf(x.betrag, true) + '</span>').join('') + '</div></div>';
-  } else if (w.status === 'storniert') {
-    res = '<div class="result void"><b>Storniert</b><p>Zählt nicht für die Rangliste.</p></div>';
+    const wp = w.bilanz.find(x => x.name === w.ersteller) || { betrag: 0 }, n = w.deals.length, je = n ? -wp.betrag / n : 0;
+    meta += '<span class="chip ' + (w.gewinner === 'E' ? 'stk' : 'gold') + '">🏆 ' + (w.gewinner === 'E' ? 'W' : 'D') + ' gewinnt</span>' +
+      '<span class="chip ' + (wp.betrag >= 0 ? 'ok' : 'bad') + '">' + esc(w.ersteller) + ' ' + chf(wp.betrag, true) + '</span>' +
+      '<span class="chip ' + (je >= 0 ? 'ok' : 'bad') + '">' + (n === 1 ? esc(w.deals[0].name) + ' ' : 'D je ') + chf(je, true) + '</span>';
+    if (n > 1) meta += '</div><div class="dnames ' + (je >= 0 ? 'pos' : 'neg') + '">' + w.deals.map(x => esc(x.name)).join(' · ');
   }
-  const deals = w.deals.length ? w.deals.map(x => '<div class="deal">' + av(x.name, 's') + '<span>' + esc(x.name) + '</span><time>' + wann(x.zeit) + '</time>' +
-      (A && !imArchiv ? '<button class="x" data-weg="' + w.id + '|' + esc(x.name) + '" aria-label="Deal löschen">✕</button>' : '') + '</div>').join('')
-    : '<div class="empty">' + (imArchiv ? 'Keine Deals' : 'Noch keine Deals – wer traut sich?') + '</div>';
-  let adm = '';
+  if (w.status === 'storniert') meta += '<span class="chip">storniert</span>';
+  let tools = '<button class="ib' + (S.info === w.id ? ' on' : '') + '" data-info="' + w.id + '" aria-label="Info">ℹ️</button>';
   if (A) {
-    const b = [];
-    if (w.status !== 'offen') b.push('<button data-undo="' + w.id + '">↩︎ ' + (imArchiv ? 'Zurückholen' : 'Rückgängig') + '</button>');
-    if (!imArchiv) b.push('<button data-arch="' + w.id + '">📦 ' + (w.status === 'offen' ? 'Stornieren' : 'Archivieren') + '</button>');
-    adm = b.length ? '<div class="adm">' + b.join('') + '</div>' : '';
+    if (w.status !== 'offen') tools += '<button class="ib" data-undo="' + w.id + '" aria-label="' + (imArchiv ? 'Zurückholen' : 'Rückgängig') + '">↩︎</button>';
+    if (!imArchiv) tools += '<button class="ib" data-arch="' + w.id + '" data-leer="' + (w.deals.length ? '' : '1') + '" aria-label="Entfernen">' + (w.status !== 'offen' ? '📦' : w.deals.length ? '📦' : '🗑️') + '</button>';
   }
-  return '<div class="tk' + (imArchiv ? ' arch' : '') + '"><div class="tk-top"><div class="tk-meta">' + av(w.ersteller, 's') +
-    '<b style="color:var(--tx)">' + esc(w.ersteller) + '</b><span>· ' + wann(w.erstellt) + '</span><span class="id" style="margin-left:auto">#' + w.id + '</span></div>' +
-    '<h3>' + esc(w.text) + '</h3><div class="chips">' + chips + '</div></div><div class="perf"></div><div class="tk-bot">' + res +
-    '<div class="lbl" style="margin:0 0 4px">🤝 Deals <span>' + w.deals.length + '</span></div>' + deals + adm + '</div></div>';
+  const deals = w.deals.length ? w.deals.map(x => '<span class="dc">' + esc(x.name) +
+      (A && !imArchiv ? '<button class="dx" data-weg="' + w.id + '|' + esc(x.name) + '" aria-label="Deal löschen">✕</button>' : '') + '</span>').join('')
+    : '<span class="empty">' + (imArchiv ? 'keine Deals' : 'noch keine Deals') + '</span>';
+  const bil = w.status === 'entschieden' ? '<div class="bil">' + w.bilanz.map(x => '<span class="chip ' + (x.betrag >= 0 ? 'ok' : 'bad') + '">' + esc(x.name) + ' ' + chf(x.betrag, true) + '</span>').join('') + '</div>' : '';
+  return '<div class="tk' + (w.status === 'entschieden' ? (w.gewinner === 'E' ? ' winW' : ' winD') : '') + '"><div class="tk-meta">' + av(w.ersteller, 's') + '<b>' + esc(w.ersteller) + '</b><span>' + wann(w.erstellt) + '</span>' +
+    '<span class="id">#' + w.id + '</span>' + tools + '</div>' +
+    '<h3>' + esc(w.text) + ' <span class="amt">' + w.einsatz + ' CHF</span></h3>' + (meta ? '<div class="chips one">' + meta + '</div>' : '') +
+    (w.status === 'entschieden' ? '' : '<div class="dl"><span class="dlab">D</span><div class="dcs">' + deals + '</div></div>') +
+    (S.info === w.id ? '<div class="info"><div><span>Erstellt</span><time>' + wann(w.erstellt) + '</time></div>' +
+      (w.deadline ? '<div><span>Deadline</span><time>' + wann(w.deadline) + '</time></div>' : '') +
+      (w.deals.length ? w.deals.map(x => '<div><span>🤝 ' + esc(x.name) + '</span><time>' + wann(x.zeit) + '</time></div>').join('') : '<div><span>Noch keine Deals</span></div>') +
+      (w.entschieden ? '<div><span>✅ eingetragen von ' + esc(w.entschiedenVon) + '</span><time>' + wann(w.entschieden) + '</time></div>' : '') + '</div>' : '') + '</div>';
 }
 function viewLauf() {
   const l = S.d.laufend;
-  return '<h1>Laufend<small>' + l.filter(w => w.status === 'offen').length + ' offen · entschiedene gehen 16 h nach Start ins Archiv</small></h1><main>' +
+  return '<h1>Laufend<small>' + l.filter(w => w.status === 'offen').length + ' offen</small></h1><main>' +
     (l.length ? l.map(w => ticket(w, false)).join('') : '<div class="center">Gerade keine Wetten.<br>Zeit für eine neue? 🎲</div>') + '</main>';
 }
 function viewArch() {
   const d = S.d, mine = S.archivFilter === 'mine';
   const l = d.archiv.filter(w => !mine || w.ersteller === d.ich || w.deals.some(x => x.name === d.ich));
-  return '<h1>Archiv<small>Abgeschlossene Wetten mit allen Zeiten.</small></h1><main><div class="seg">' +
+  return '<h1>Archiv</h1><main><div class="seg">' +
     [['alle', 'Alle'], ['mine', 'Nur meine']].map(o => '<button data-f="' + o[0] + '" class="' + (S.archivFilter === o[0] ? 'on' : '') + '">' + o[1] + '</button>').join('') + '</div>' +
     (l.length ? l.map(w => ticket(w, true)).join('') : '<div class="center">Noch nichts im Archiv.</div>') + '</main>';
 }
 function bindListe() {
+  document.querySelectorAll('[data-info]').forEach(b => b.onclick = () => { const id = Number(b.dataset.info); S.info = S.info === id ? null : id; tap(); const y = scrollY; render(); scrollTo(0, y); });
   document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { S.archivFilter = b.dataset.f; tap(); render(); });
   document.querySelectorAll('[data-weg]').forEach(b => b.onclick = () => { const [id, n] = b.dataset.weg.split('|'); admin('dealWeg', { id, name: n }, 'Deal von ' + n + ' bei Wette #' + id + ' löschen?'); });
   document.querySelectorAll('[data-undo]').forEach(b => b.onclick = () => admin('undo', { id: b.dataset.undo }, 'Wette #' + b.dataset.undo + ' wieder öffnen? Das Ergebnis wird entfernt.'));
-  document.querySelectorAll('[data-arch]').forEach(b => b.onclick = () => admin('arch', { id: b.dataset.arch }, 'Wette #' + b.dataset.arch + ' jetzt ins Archiv? Offene Wetten werden storniert.'));
+  document.querySelectorAll('[data-arch]').forEach(b => b.onclick = () => admin('arch', { id: b.dataset.arch }, b.dataset.leer ? 'Wette #' + b.dataset.arch + ' komplett löschen? Sie verschwindet überall.' : 'Wette #' + b.dataset.arch + ' jetzt ins Archiv? Offene Wetten werden storniert.'));
 }
 
 /* ---------- Rangliste ---------- */
