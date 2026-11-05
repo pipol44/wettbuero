@@ -174,6 +174,10 @@ nav .badge{position:absolute;top:3px;right:calc(50% - 22px);min-width:17px;heigh
 .sum{flex:1;font-size:11px;color:var(--mut);line-height:1.2}
 .sum b{display:block;color:var(--tx);font:800 18px var(--cond);letter-spacing:.5px}
 .sumbar .cta{width:auto;margin:0;padding:10px 18px}
+.dladd{margin-top:7px;padding:5px 10px;border-radius:99px;background:var(--bg2);border:1px solid var(--line);color:var(--mut);font-size:12px;font-weight:500}
+.dladd span{color:var(--dim);font-weight:400;margin-left:3px}
+.sdl{margin-top:7px}.sdl input{padding:6px 8px;font-size:13px}.sdl .dlclr{width:28px;height:28px}
+.dli{font-size:14px}
 </style>
 </head>
 <body>
@@ -253,55 +257,56 @@ function renderRegister() {
   }));
 }
 
-/* ---------- Wettschein (mehrere Wetten) ---------- */
-function dlWert() { return S.dlEigen ? new Date(S.dlEigen) : null; }
-function slip() { if (!S.slip) S.slip = [{ text: '', einsatz: null }]; return S.slip; }
+/* ---------- Wettschein (mehrere Wetten, jede mit eigener Deadline) ---------- */
+function slip() { if (!S.slip) S.slip = [{ text: '', einsatz: null, dl: '', dlOffen: false }]; return S.slip; }
 function viewNeu() {
-  const d = S.d, sl = slip(), dl = dlWert();
+  const d = S.d, sl = slip();
   const total = sl.reduce((a, x) => a + (x.einsatz || 0), 0);
   return '<h1>Wettschein</h1><main class="schein">' +
     sl.map((x, i) => '<div class="slip"><div class="sh"><span class="nb">' + (i + 1) + '</span>Wette' +
       (sl.length > 1 ? '<button class="sx" data-del="' + i + '" aria-label="Wette entfernen">✕</button>' : '') + '</div>' +
       '<textarea data-t="' + i + '" maxlength="200" rows="1">' + esc(x.text) + '</textarea>' +
-      '<div class="stakes">' + d.einsaetze.map(e => '<button class="stake' + (x.einsatz === e ? ' on' : '') + '" data-x="' + i + '|' + e + '">' + e + '</button>').join('') + '</div></div>').join('') +
+      '<div class="stakes">' + d.einsaetze.map(e => '<button class="stake' + (x.einsatz === e ? ' on' : '') + '" data-x="' + i + '|' + e + '">' + e + '</button>').join('') + '</div>' +
+      (x.dl || x.dlOffen
+        ? '<div class="dlrow sdl"><span class="dli">⏰</span><input type="datetime-local" data-dl="' + i + '" value="' + esc(x.dl) + '"><button class="dlclr" data-dlx="' + i + '" aria-label="Deadline entfernen">✕</button></div>' +
+          (x.dl ? '<div class="note">🔒 Ab ' + wann(new Date(x.dl).getTime()) + ' keine Deals mehr</div>' : '')
+        : '<button class="dladd" data-dlo="' + i + '">⏰ Deadline <span>freiwillig</span></button>') +
+      '</div>').join('') +
     (sl.length < 10 ? '<button class="add" id="add">＋ Weitere Wette</button>' : '') +
-    '<div class="sec"><div class="lbl">Deadline · für alle <span>freiwillig</span></div>' +
-      '<div class="dlrow"><input type="datetime-local" id="dlx" value="' + esc(S.dlEigen) + '">' +
-      (S.dlEigen ? '<button class="dlclr" id="dlclr" aria-label="Deadline entfernen">✕</button>' : '') + '</div>' +
-      (dl ? '<div class="note">🔒 Ab ' + wann(dl.getTime()) + ' keine Deals mehr.</div>' : '') + '</div>' +
     '<div class="err" id="err"></div></main>' +
     '<div class="sumbar"><div class="sum">' + sl.length + (sl.length === 1 ? ' Wette' : ' Wetten') + '<b>' + chf(total) + ' CHF</b></div>' +
     '<button class="cta" id="go">Platzieren</button></div>';
 }
 function merke() {
   document.querySelectorAll('[data-t]').forEach(t => { slip()[Number(t.dataset.t)].text = t.value; });
-  const x = $('#dlx'); if (x) S.dlEigen = x.value;
+  document.querySelectorAll('input[data-dl]').forEach(t => { slip()[Number(t.dataset.dl)].dl = t.value; });
 }
 function bindNeu() {
   const re = () => { tap(); const y = scrollY; render(); scrollTo(0, y); };
   document.querySelectorAll('[data-t]').forEach(t => { const fit = () => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; }; fit(); t.oninput = fit; });
   document.querySelectorAll('[data-x]').forEach(b => b.onclick = () => { merke(); const [i, e] = b.dataset.x.split('|'); slip()[Number(i)].einsatz = Number(e); re(); });
   document.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { merke(); slip().splice(Number(b.dataset.del), 1); re(); });
-  const add = $('#add'); if (add) add.onclick = () => { merke(); slip().push({ text: '', einsatz: null }); re(); const t = document.querySelectorAll('[data-t]'); t[t.length - 1].focus(); };
-  $('#dlx').onchange = () => { merke(); re(); };
-  const c = $('#dlclr'); if (c) c.onclick = () => { merke(); S.dlEigen = ''; re(); };
+  document.querySelectorAll('[data-dlo]').forEach(b => b.onclick = () => { merke(); slip()[Number(b.dataset.dlo)].dlOffen = true; re(); });
+  document.querySelectorAll('[data-dlx]').forEach(b => b.onclick = () => { merke(); const x = slip()[Number(b.dataset.dlx)]; x.dl = ''; x.dlOffen = false; re(); });
+  document.querySelectorAll('input[data-dl]').forEach(t => t.onchange = () => { merke(); re(); });
+  const add = $('#add'); if (add) add.onclick = () => { merke(); slip().push({ text: '', einsatz: null, dl: '', dlOffen: false }); re(); const t = document.querySelectorAll('[data-t]'); t[t.length - 1].focus(); };
   $('#go').onclick = senden;
 }
 async function senden() {
   merke();
   const err = t => { $('#err').textContent = t; haptic('error'); };
-  const sl = slip(), dl = dlWert();
+  const sl = slip();
   for (let i = 0; i < sl.length; i++) {
     const nr = sl.length > 1 ? ' (Wette ' + (i + 1) + ')' : '';
     if (!sl[i].text.trim()) return err('Bitte die Wette eingeben' + nr + '.');
     if (!sl[i].einsatz) return err('Bitte einen Einsatz wählen' + nr + '.');
+    if (sl[i].dl && new Date(sl[i].dl) <= new Date()) return err('Die Deadline liegt in der Vergangenheit' + nr + '.');
   }
-  if (dl && dl <= new Date()) return err('Die Deadline liegt in der Vergangenheit.');
   const b = $('#go'); b.disabled = true; b.textContent = '…';
   try {
-    const r = await call('create', { wetten: sl.map(x => ({ text: x.text.trim(), einsatz: x.einsatz })), deadline: dl ? dl.toISOString() : '' });
+    const r = await call('create', { wetten: sl.map(x => ({ text: x.text.trim(), einsatz: x.einsatz, deadline: x.dl ? new Date(x.dl).toISOString() : '' })) });
     if (!r.ok) { b.disabled = false; b.textContent = 'Platzieren'; return err(r.error); }
-    haptic('success'); S.slip = null; S.dlEigen = '';
+    haptic('success'); S.slip = null;
     const n = (r.ids || [r.id]).length;
     tg && tg.showAlert ? tg.showAlert('✅ ' + (n === 1 ? 'Wette ist' : n + ' Wetten sind') + ' im Wettbüro!', () => tg.close()) : load();
   } catch (e) { b.disabled = false; b.textContent = 'Platzieren'; err('Keine Verbindung. Nochmals versuchen.'); }
